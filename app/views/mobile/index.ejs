@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="user-scalable=no,initial-scale=1" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <link rel="apple-touch-startup-image" href="http://theca2.googlecode.com/svn-history/r193/trunk/apps/mobile/webroot/images/apple-touch-startup-image.png" />
+    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.1.0-rc.1/jquery.mobile-1.1.0-rc.1.min.css" />
+    <link rel="stylesheet" href="/stylesheet/mobile.css" />
+    <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+    <script type="text/javascript" src="http://code.jquery.com/mobile/1.1.0-rc.1/jquery.mobile-1.1.0-rc.1.min.js"></script>
+    <script type="text/javascript" src="/javascript/kinetic-v3.8.0.js"></script>
+    <script type="text/javascript" src="/javascript/cchart.js"></script>
+    <script type="text/javascript" src="/javascript/price.js"></script>
+    <script type="text/javascript" src="/javascript/connection_status.js"></script>
+    <script type="text/javascript" src="/javascript/bar.js?<%= new Date().getTime() %>"></script>
+    <script type="text/javascript">
+      
+      var socket = io.connect();
+
+      var pricePublisher = new PricePublisher(socket);
+      <% for(var i in priceSettings){ %>
+        pricePublisher.addPriceListener("<%= i %>", new PricePanel({currencyPair : "<%= i %>" }));
+      <% } %>
+
+      var barPublisher = new BarPublisher(socket);
+      
+      $(document).ready(function(){
+
+        $("#sendMessageButton").click(function(){
+          var message = $("#chartMessageArea").val();
+          socket.emit("chatMessage", {message : message});
+          $.mobile.changePage("#chat", { transition: "slidedown"} );
+          $("#chartMessageArea").val("");
+        });
+        
+        new ConnectionStatus(socket, {
+            "count" : "#connectionCount",
+            "status" : "#connectionStatus"
+        }).start();
+
+      });
+
+      var detailPanel = null;
+      var detailCurrencyPair = null;
+      var barTypeChanger = null;
+      $("#detail").live("pageshow", function(event){
+        var param = $.mobile.path.parseUrl(event.target.baseURI).search;
+        param.match(/currencyPair=(.*)/);
+        detailCurrencyPair = RegExp.$1;
+        detailPanel = new DetailPricePanel({currencyPair : detailCurrencyPair });
+        pricePublisher.addPriceListener(detailCurrencyPair, detailPanel);
+
+        barTypeChanger = new BarTypeChanger({
+            containerId : "#barTypeChanger",
+            tickButtonId : ".tick",
+            oneMinButtonId : ".oneMin",
+            currencyPair : detailCurrencyPair,
+            barPublisher : barPublisher
+        });      
+        
+      });
+      
+      $("#detail").live("pageremove", function(event){
+        pricePublisher.removePriceListener(detailCurrencyPair, detailPanel);
+        barTypeChanger.removeBarListener();
+      });
+      
+      socket.on('chatMessage', function (data) {
+        $("#notificationMessage").remove();
+        var list = jQuery("<li>" + data.message + "</li>");
+        list.addClass("ui-li");
+        list.addClass("ui-li-static");
+        list.addClass("ui-body-c");
+        $("#chatMessages").append(list);
+      });    
+      
+    </script>
+    <title>Complex FX</title>
+  </head>
+  <body>
+    <!-- currencies page -->
+    <div data-role="page" id="currencies">
+      <div data-role="header" data-position="fixed">
+        <h2>Currencies</h2>
+      </div>
+      <div data-role="contents">
+        <ul data-role="listview">
+            <li data-role="list-divider">
+              <span class="currencyPair">Currencies</span>
+              <span class="bidPrice">Bid</span>
+              <span class="bidArrow">&nbsp;</span>
+              <span class="askPrice">Ask</span>
+              <span class="bidArrow">&nbsp;</span>
+              <span style="width:15px; float:left; display:block">&nbsp;</span>
+              <span style="clear: both">&nbsp;</span>
+            </li>
+        <% for(var i in priceSettings){ %>
+        <% var key = i.replace("/", "") %>
+            <li>
+                <a href="detail?currencyPair=<%= i %>">
+                  <span id="currencyPair_<%= key %>" class="currencyPair"><%= i %></span>
+                  <span id="bidPrice_<%= key %>" class="bidPrice">--</span>
+                  <span id="bidArrow_<%= key %>" class="bidArrow">&nbsp;</span>
+                  <span id="askPrice_<%= key %>" class="askPrice">--</span>
+                  <span id="askArrow_<%= key %>" class="askArrow">&nbsp;</span>
+                  <span style="clear: both">&nbsp;</span>
+                </a>
+            </li>
+        <% } %>
+        </ul>
+      </div>
+      <%- partial('footer.ejs') %>
+    </div>
+
+    <!-- chat page -->
+    <div data-role="page" id="chat">
+      <div data-role="header" data-position="fixed">
+        <h2>Chat</h2>
+        <a href="#chatForm" data-icon="check" class="ui-btn-right" data-transition="slideup">メッセージ</a>
+      </div>
+      <div data-role="contents">
+        <ul id="chatMessages" data-role="listview">
+          <li id="notificationMessage" style="color: #666666">メッセージを投稿してください。</li>
+        </ul>
+      </div>
+      <%- partial('footer.ejs') %>
+    </div>
+
+    <!-- chat form -->
+    <div data-role="page" id="chatForm">
+      <div data-role="header" data-position="fixed">
+        <a href="#chat" data-icon="delete" data-transition="slidedown">Cancel</a>
+        <h2>Chat</h2>
+        <a href="#" id="sendMessageButton" data-icon="check" class="ui-btn-right" data-transition="slidedown">投稿する</a>
+      </div>
+      <div data-role="contents">
+        <div data-role="fieldcontain">
+            <label for="textarea">メッセージを入力してください。:</label>
+            <textarea name="textarea" id="chartMessageArea"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- info -->
+    <div data-role="page" id="info">
+      <div data-role="header" data-position="fixed">
+        <h2>Info</h2>
+      </div>
+      <div data-role="contents">
+        <ul data-role="listview">
+         <li>現在の接続数：<span id="connectionCount"></span></li>
+         <li>現在の接続状態：<span id="connectionStatus"></span></li>
+        </ul>
+      </div>
+      <%- partial('footer.ejs') %>      
+    </div>
+  </body>
+</html>
+
