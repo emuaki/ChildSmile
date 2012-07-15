@@ -1,18 +1,11 @@
 {
-  "name": "PricePanel",
+  "name": "ChildSmile",
   "version": "0.0.1",
-  "private": true,
   "dependencies": {
-    "mkdirp" : "0.3.0",
     "oauth" : "0.9.5",
-    "cookies" : "0.2.1",
-    "keygrip" : "0.2.0",
     "asyncjs" : "0.0.5",
     "express": "2.5.8",
     "ejs": "0.6.1",
-    "socket.io" : "0.9.6",
-    "stylus" : "0.24.0",
-    "nib" : "0.3.2",
-    "ntwitter" : "0.2.10"
+    "socket.io" : "0.9.6"
   }
 }
