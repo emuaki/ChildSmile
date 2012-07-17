@@ -1,0 +1,100 @@
+body {
+    background-color: #E7EBF2;
+}
+
+
+@media screen and (max-width: 1300px) {
+  .container{
+      margin-right : '' ;
+      margin-left: 70px;
+  }
+}
+
+#minipanel {
+    position: absolute;
+    right: 10px;
+    display: none;
+}
+
+#minipanel .minichart {
+    margin-top: -50px;
+}
+
+.minichart .line {
+    width: 2px;
+    height: 78px;
+    background-color: red;
+    position: relative;
+    left: 225px;
+    top: 90px;
+    opacity: 0.5;
+}
+
+.hero-unit {
+    padding: 60px 5px 5px 5px;
+    margin-bottom: 5px;
+}
+
+
+.row {
+    background : url(../img/timeline_bg.png) repeat-y 20px 0px;
+}
+
+ul.timeline {
+    list-style: none;
+    margin: 0px;
+}
+
+.timelineItem {
+    margin: 20px 0;
+    background-color: white;
+    padding: 5px;
+    border-left: 1px solid #BBBBC2;
+    border-right: 1px solid #97A4C2;
+    border-bottom: 2px solid #97A4C2;
+}
+
+.timelineItem .avator {
+    position: absolute;
+}
+
+.timelineItem .contents {
+    margin-left: 60px;
+}
+
+
+.timelineItem .contents .header{
+    font-size: 12px;
+}
+
+
+.timelineItem .contents .main{
+
+}
+
+.timelineItem .contents .footer{
+    color : #666666;
+}
+
+
+.spacer { 
+    height: 50px;
+}
+
+.timebox {
+    position: relative; 
+    left: 410px;
+    border-radius: 5px;
+    border:solid 1px #666666; 
+    width: 100px;
+    height: 20px;
+    margin: 10px;
+    text-align: center;
+    color: white;
+    background-color: #aaaaaa;
+}
+
+.timebox.day {
+    font-size: 16px;
+    
+}
