@@ -17,9 +17,11 @@
         var url = '/getImage?imagePath=' + imagePath;
       	var element = [
              '<li>',
-	     	 '<a href="' + url + '" class="thumbnail" data-ajax=”false”>',
-             '<img  src="' + url + '" alt="優太郎くんの写真" />',
+            '<div class="thunbnail">',
+	     	 '<a href="' + url + '">',
+             '<img  src="' + url + '" alt="優太郎くんの写真" width="260" height="180"/>',
              '</a>',
+             '</div>',
              '</li>'
           ].join('');
       	return element;
