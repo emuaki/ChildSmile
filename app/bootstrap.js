@@ -4,6 +4,7 @@ var port = process.env.PORT || 3000;
 app.listen(port);
 
 var ejs = require('ejs');
+var fs = require('fs');
 
 console.log(__dirname);
 
@@ -15,7 +16,8 @@ function compile(str, path){
         .use(nib());
 }
 
-app.use(express.bodyParser({uploadDir:'/tmp'}));
+var UPLOAD_DIR = __dirname + '/../uploadimages/yutaro';
+app.use(express.bodyParser({uploadDir:UPLOAD_DIR}));
 
 app.set('view engine', 'ejs');
 app.set('view options', { layout: false });
@@ -25,7 +27,24 @@ app.get('/', function(req, res){
     res.render('mobile/index.ejs');
 });
 
-var fs = require('fs');
+app.get('/yutarou/images', function(req,res) {
+  console.log("get /yutarou/images");
+  files = fs.readdirSync(UPLOAD_DIR)
+  res.send(JSON.stringify(files), { 'Content-Type': 'application/json' }, 200);
+
+/*
+  fs.readdir('/tmp/yutarou', function(err,files) {
+    console.log("callback readdir");
+    res.send(JSON.stringify(files), { 'Content-Type': 'application/json' }, 200);
+  });
+*/
+});
+
+app.get('/yutarou', function(req,res) {
+  res.render('mobile/yutarou.ejs');
+});
+
+
 app.all('/upload', function(req, res){
     console.log('upload start');
     console.log(req.files.file.path);

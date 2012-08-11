@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="user-scalable=no,initial-scale=1" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.1.1/jquery.mobile-1.1.1.min.css" />
+    <link rel="stylesheet" href="/css/bootstrap.css" />
+    <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+	<script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+	<script src="http://code.jquery.com/mobile/1.1.1/jquery.mobile-1.1.1.min.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.js"></script>
+    <script type="text/javascript">
+      var socket = io.connect();
+      socket.on('uploaded', function(data){
+
+          var element = [
+             '<li>',
+	     '<div class="thumbnail">',
+             '<img  src="/getImage?imagePath=' + data.imagePath + '" width="260" height="180" />',
+             '</div>',
+             '</li>'
+          ].join('');
+
+          $("#imageContainer").append(element);
+      });
+    </script>
+    <title>ChildSmile</title>
+  </head>
+  <body>
+
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="#">優太郎くんホーム</a>
+
+          <div class="navbar-search" style="margin-left: 160px;">
+            <input type="text" class="search-query" placeholder="ユーザ名を入力してください" style="margin-top:5px;"/>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+
+      <div class="row">
+	<div class="span12" style="margin-top: 50px;">
+
+	  <ul class="thumbnails" id="imageContainer">
+
+	  </ul>
+	</div>
+      </div>
+      
+    </div>
+  </body>
+</html>
+
