@@ -6,11 +6,37 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <link rel="stylesheet" href="http://code.jquery.com/mobile/1.1.0-rc.1/jquery.mobile-1.1.0-rc.1.min.css" />
     <link rel="stylesheet" href="/css/bootstrap.css" />
+    <link rel="apple-touch-icon" href="/img/yutaroicon.png" />
     <script type="text/javascript" src="/socket.io/socket.io.js"></script>
     <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
     <script type="text/javascript" src="/js/bootstrap.js"></script>
     <script type="text/javascript">
       var socket = io.connect();
+      var addImage = function( imagePath ) {
+          var element = [
+             '<li>',
+	     '<div class="thumbnail">',
+             '<img  src="/getImage?imagePath=' + imagePath + '" width="260" height="180" />',
+             '</div>',
+             '</li>'
+          ].join('');
+
+          $("#imageContainer").append(element);
+      };
+      
+      var getImages = function() {
+        $.get( '/yutarou/images', function(data) {
+           for( var i = 0; i < data.length; i++ ) {
+             var file = data[i];
+             addImage( 'uploadimages/yutaro/' + file );
+           }
+        } );
+      };
+      
+      $(function() {
+        getImages();
+      });
+      
       socket.on('uploaded', function(data){
 
           var element = [
@@ -23,8 +49,9 @@
 
           $("#imageContainer").append(element);
       });
+
     </script>
-    <title>ChildSmile</title>
+    <title>ゆうたろうアプリ</title>
   </head>
   <body>
 
@@ -39,7 +66,6 @@
           <a class="brand" href="#">ChildSmile 管理画面</a>
 
           <div class="navbar-search" style="margin-left: 160px;">
-            <input type="text" class="search-query" placeholder="ユーザ名を入力してください" style="margin-top:5px;"/>
           </div>
         </div>
       </div>
