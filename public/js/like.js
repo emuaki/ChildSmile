@@ -58,7 +58,6 @@ LikeSplash.prototype = {
             opacity: 0.1
         }, 
         self.animeOption.duration,
-        'ease-out',
          function(){
             self.element.fadeOut(500);
             self.element.remove();
@@ -116,7 +115,7 @@ Stamp.prototype = {
 
     initialize : function(args){
 	this.socket = args.socket;
-	this.ele = $(args.ele);
+	this.ele = args.ele;
         this.setupListener();
     },
 
@@ -168,13 +167,12 @@ LikePanel.prototype = {
     
     setupListener : function(){
         var self = this;
-        this.stamps.each(function(i){
-            new Stamp({
-		socket : self.socket,
-		ele : this
-	    });
-        });
+        new Stamp({
+           socket : self.socket,
+	   ele : self.stamps
+	});
         this.socket.on("push-heart", function(data){
+	    console.log("receive push-heart");
             self.onLikeCountUp(data);
             self.initialReceive = true;
         });

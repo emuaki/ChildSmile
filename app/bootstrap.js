@@ -64,6 +64,11 @@ app.get('/getImage', function(req, res){
 });
 
 
-socket.on('heart', function(data, ack){
-    socket.broadcast.emit('push-heart', {count: 0});
+io.sockets.on('connection', function(socket){
+
+    socket.on('heart', function(data, ack){
+	console.log("receive heart");
+	socket.broadcast.emit('push-heart', {count: 0, stampId : data.stampId});
+    });
+
 });

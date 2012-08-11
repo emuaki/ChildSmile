@@ -68,19 +68,20 @@
             }
          });
 
+        new LikePanel({
+            socket : socket,
+            selector : {
+                button : ".stampImage",
+                counter : "#likeCounter"
+            }
+        });
+
       });
       
       socket.on('uploaded', function(data){
       	addImage( data.imagePath );
       });
 
-      new LikePanel({
-          socket : socket,
-          selector : {
-              button : ".stampImage",
-              counter : "#likeCounter"
-          }
-      });
 
     </script>
     <title>ゆうたろう</title>
@@ -96,7 +97,7 @@
             <span class="icon-bar"></span>
           </a>
           <a class="brand" href="#">ゆうたろうアプリ</a>
-
+    <a href="" id="heart" class="stampImage">click</a>
           <div class="navbar-search" style="margin-left: 160px;">
           </div>
         </div>
