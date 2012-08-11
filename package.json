@@ -6,6 +6,7 @@
     "asyncjs" : "0.0.5",
     "express": "2.5.8",
     "ejs": "0.6.1",
-    "socket.io" : "0.9.6"
+    "socket.io" : "0.9.6",
+    "zlib" : "*"
   }
 }
