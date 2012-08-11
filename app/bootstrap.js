@@ -44,7 +44,6 @@ app.get('/yutarou', function(req,res) {
   res.render('mobile/yutarou.ejs');
 });
 
-
 app.all('/upload', function(req, res){
     console.log('upload start');
     console.log(req.files.file.path);
@@ -56,9 +55,9 @@ app.all('/upload', function(req, res){
 });
 
 app.get('/getImage', function(req, res){
-    console.log('call getImage');
     var imagePath = req.query.imagePath;
+    console.log('call getImage: ' + imagePath);
     fs.readFile(imagePath, function(err, data){
-	res.send(data, { 'Content-Type': 'image/jpeg' }, 200);
+	  res.send(data, { 'Content-Type': 'image/jpeg' }, 200);
     });
 });
