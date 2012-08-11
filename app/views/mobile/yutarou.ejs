@@ -6,11 +6,21 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <link rel="stylesheet" href="/css/styles.css" />
     <link rel="stylesheet" href="/css/bootstrap.css" />
+    <link rel="apple-touch-icon" href="/img/144x144icon.png" />
+    <style type="text/css">
+    .connectionStatusArea {
+      position: fixed;
+      bottom : 10px;
+      right: 10px;
+      color: #666666;
+    }
+    </style>
     <script type="text/javascript" src="/socket.io/socket.io.js"></script>
-	<script src="/js/jquery-1.7.2.min.js"></script>
-	<script src="/js/klass.min.js"></script>
-	<script src="/js/code.photoswipe.jquery-3.0.5.js"></script>
-	<script type="text/javascript" src="/js/bootstrap.js"></script>
+    <script src="/js/jquery-1.7.2.min.js"></script>
+    <script src="/js/klass.min.js"></script>
+    <script src="/js/code.photoswipe.jquery-3.0.5.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.js"></script>
+    <script type="text/javascript" src="/js/status.js"></script>
     <script type="text/javascript">
       var socket = io.connect();
       var imageHtml = function( imagePath ) {
@@ -69,13 +79,23 @@
       
       $(function() {
         getImages();
+
+         new ConnectionStatus({
+            socket : socket,
+            selector : {
+                status : "#connectionStatus",
+                count : "#connectionCount",
+                transport : "#connectionTransport"
+            }
+         });
+
       });
       
       socket.on('uploaded', function(data){
       	addImage( data.imagePath );
       });
     </script>
-    <title>ChildSmile</title>
+    <title>ゆうたろう</title>
   </head>
   <body>
 
@@ -106,8 +126,10 @@
 	  <a href="#" id="button-heart" style="display: none; position: absolute; z-index: 2000; top: 45px;"><img src="/img/heart.png" width="50px" /></a>
 	</div>
       </div>
-      
     </div>
+    <div class="connectionStatusArea">
+      接続ステータス:<span id="connectionStatus">--</span>
+    </div>      
   </body>
 </html>
 
