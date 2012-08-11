@@ -54,10 +54,16 @@ app.all('/upload', function(req, res){
     res.send('File uploaded to: ' + tmp_path + ' - ' + req.files.file.size + ' bytes');
 });
 
+
 app.get('/getImage', function(req, res){
     var imagePath = req.query.imagePath;
     console.log('call getImage: ' + imagePath);
     fs.readFile(imagePath, function(err, data){
 	  res.send(data, { 'Content-Type': 'image/jpeg' }, 200);
     });
+});
+
+
+socket.on('heart', function(data, ack){
+    socket.broadcast.emit('push-heart', {count: 0});
 });

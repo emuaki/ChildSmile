@@ -21,6 +21,7 @@
     <script src="/js/code.photoswipe.jquery-3.0.5.js"></script>
     <script type="text/javascript" src="/js/bootstrap.js"></script>
     <script type="text/javascript" src="/js/status.js"></script>
+    <script type="text/javascript" src="/js/like.js"></script>
     <script type="text/javascript">
       var socket = io.connect();
       var imageHtml = function( imagePath ) {
@@ -72,6 +73,15 @@
       socket.on('uploaded', function(data){
       	addImage( data.imagePath );
       });
+
+      new LikePanel({
+          socket : socket,
+          selector : {
+              button : ".stampImage",
+              counter : "#likeCounter"
+          }
+      });
+
     </script>
     <title>ゆうたろう</title>
   </head>
