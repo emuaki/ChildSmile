@@ -7,21 +7,25 @@
 	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.1.1/jquery.mobile-1.1.1.min.css" />
     <link rel="stylesheet" href="/css/bootstrap.css" />
     <script type="text/javascript" src="/socket.io/socket.io.js"></script>
-    <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
-	<script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+	<script src="js/jquery-1.7.2.min.js"></script>
 	<script src="http://code.jquery.com/mobile/1.1.1/jquery.mobile-1.1.1.min.js"></script>
-    <script type="text/javascript" src="/js/bootstrap.js"></script>
+	<script src="js/klass.min.js"></script>
+	<script src="js/code.photoswipe.jquery-3.0.5.js"></script>
     <script type="text/javascript">
       var socket = io.connect();
-      var addImage = function( imagePath ) {
-          var element = [
+      var imageHtml = function( imagePath ) {
+        var url = '/getImage?imagePath=' + imagePath;
+      	var element = [
              '<li>',
-	     '<div class="thumbnail">',
-             '<img  src="/getImage?imagePath=' + imagePath + '" width="260" height="180" />',
-             '</div>',
+	     	 '<a href="' + url + '" class="thumbnail">',
+             '<img  src="' + url + '" />',
+             '</a>',
              '</li>'
           ].join('');
-
+      	return element;
+      };
+      var addImage = function( imagePath ) {
+          var element = imageHtml( imagePath )
           $("#imageContainer").append(element);
       };
       
@@ -31,6 +35,9 @@
              var file = data[i];
              addImage( 'uploadimages/yutaro/' + file );
            }
+          var options = {};
+          $("#imageContainer a").photoSwipe(options);
+
         } );
       };
       
@@ -39,16 +46,7 @@
       });
       
       socket.on('uploaded', function(data){
-
-          var element = [
-             '<li>',
-	     '<div class="thumbnail">',
-             '<img  src="/getImage?imagePath=' + data.imagePath + '" width="260" height="180" />',
-             '</div>',
-             '</li>'
-          ].join('');
-
-          $("#imageContainer").append(element);
+      	addImage( data.imagePath );
       });
     </script>
     <title>ChildSmile</title>
@@ -57,16 +55,12 @@
 
 	<div data-role="page">
 		<div data-role="header">
-			<h1>Page Title</h1>
+			<h1>優太郎くんの写真</h1>
 		</div><!-- /header -->
-		<div data-role="content">	
+		<div data-role="content">
 		  <ul class="thumbnails" id="imageContainer">
-
 		  </ul>
 		</div><!-- /content -->
-		<div data-role="footer">
-			<h4>Page Footer</h4>
-		</div><!-- /footer -->
 	</div>
 	
   </body>
