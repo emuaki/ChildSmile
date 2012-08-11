@@ -28,7 +28,7 @@
         var url = '/getImage?imagePath=' + imagePath;
       	var element = [
              '<li>',
-            '<div class="thumbnail">',
+            '<div class="thunbnail">',
 	     	 '<a href="' + url + '">',
              '<img  src="' + url + '" alt="優太郎くんの写真" width="260" height="180"/>',
              '</a>',
@@ -49,9 +49,31 @@
              addImage( 'uploadimages/yutaro/' + file );
            }
           var options = {
-            jQueryMobile: true
           };
-          $("#imageContainer a").photoSwipe(options);
+          var instance = $("#imageContainer a").photoSwipe(options);
+          var PhotoSwipe = window.Code.PhotoSwipe;
+          instance.addEventHandler(PhotoSwipe.EventTypes.onBeforeHide, function(e){
+		    $("#button-heart").hide();
+		  });
+
+		  instance.addEventHandler(window.Code.PhotoSwipe.EventTypes.onDisplayImage, function(e){
+		    var selector = "img[src='" + instance.getCurrentImage().src + "']'";
+		    console.log("img selector: " + selector);
+		    window.setTimeout( function() {
+		    var img = $(selector);
+		    var w = img.width();
+		    var offset = img.offset();
+		    
+		    var heart = $("#button-heart");
+		    var left = offset.left + w - 55;
+		    console.log( "left: " + left );
+		    heart.css({ left: left });
+		    heart.show('slow');
+		    }, 100 );
+		  });
+		  instance.addEventHandler(PhotoSwipe.EventTypes.onTouch, function(e){
+		    $("#button-heart").hide();
+		  });
 
         } );
       };
@@ -112,6 +134,7 @@
 	  <ul class="thumbnails" id="imageContainer">
 
 	  </ul>
+	  <a href="#" id="button-heart" style="display: none; position: absolute; z-index: 2000; top: 45px;"><img src="/img/heart.png" width="50px" /></a>
 	</div>
       </div>
     </div>
