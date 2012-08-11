@@ -4,21 +4,21 @@
     <meta charset="utf-8">
     <meta name="viewport" content="user-scalable=no,initial-scale=1" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
-	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.1.1/jquery.mobile-1.1.1.min.css" />
+    <link rel="stylesheet" href="/css/styles.css" />
     <link rel="stylesheet" href="/css/bootstrap.css" />
     <script type="text/javascript" src="/socket.io/socket.io.js"></script>
-	<script src="js/jquery-1.7.2.min.js"></script>
-	<script src="http://code.jquery.com/mobile/1.1.1/jquery.mobile-1.1.1.min.js"></script>
-	<script src="js/klass.min.js"></script>
-	<script src="js/code.photoswipe.jquery-3.0.5.js"></script>
+	<script src="/js/jquery-1.7.2.min.js"></script>
+	<script src="/js/klass.min.js"></script>
+	<script src="/js/code.photoswipe.jquery-3.0.5.js"></script>
+	<script type="text/javascript" src="/js/bootstrap.js"></script>
     <script type="text/javascript">
       var socket = io.connect();
       var imageHtml = function( imagePath ) {
         var url = '/getImage?imagePath=' + imagePath;
       	var element = [
              '<li>',
-	     	 '<a href="' + url + '" class="thumbnail">',
-             '<img  src="' + url + '" />',
+	     	 '<a href="' + url + '" class="thumbnail" data-ajax=”false”>',
+             '<img  src="' + url + '" alt="優太郎くんの写真" />',
              '</a>',
              '</li>'
           ].join('');
@@ -35,7 +35,9 @@
              var file = data[i];
              addImage( 'uploadimages/yutaro/' + file );
            }
-          var options = {};
+          var options = {
+            jQueryMobile: true
+          };
           $("#imageContainer a").photoSwipe(options);
 
         } );
@@ -53,16 +55,34 @@
   </head>
   <body>
 
-	<div data-role="page">
-		<div data-role="header">
-			<h1>優太郎くんの写真</h1>
-		</div><!-- /header -->
-		<div data-role="content">
-		  <ul class="thumbnails" id="imageContainer">
-		  </ul>
-		</div><!-- /content -->
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="#">ゆうたろうアプリ</a>
+
+          <div class="navbar-search" style="margin-left: 160px;">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+
+      <div class="row">
+	<div class="span12" style="margin-top: 50px;">
+
+	  <ul class="thumbnails" id="imageContainer">
+
+	  </ul>
 	</div>
-	
+      </div>
+      
+    </div>
   </body>
 </html>
 
