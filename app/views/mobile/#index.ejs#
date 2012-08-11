@@ -4,40 +4,23 @@
     <meta charset="utf-8">
     <meta name="viewport" content="user-scalable=no,initial-scale=1" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
-    <link rel="stylesheet" href="/css/styles.css" />
+    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.1.0-rc.1/jquery.mobile-1.1.0-rc.1.min.css" />
     <link rel="stylesheet" href="/css/bootstrap.css" />
     <link rel="apple-touch-icon" href="/img/144x144icon.png" />
-    <style type="text/css">
-    .connectionStatusArea {
-      position: fixed;
-      bottom : 10px;
-      right: 10px;
-      color: #666666;
-    }
-    </style>
     <script type="text/javascript" src="/socket.io/socket.io.js"></script>
-    <script src="/js/jquery-1.7.2.min.js"></script>
-    <script src="/js/klass.min.js"></script>
-    <script src="/js/code.photoswipe.jquery-3.0.5.js"></script>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
     <script type="text/javascript" src="/js/bootstrap.js"></script>
-    <script type="text/javascript" src="/js/status.js"></script>
     <script type="text/javascript">
       var socket = io.connect();
-      var imageHtml = function( imagePath ) {
-        var url = '/getImage?imagePath=' + imagePath;
-      	var element = [
+      var addImage = function( imagePath ) {
+          var element = [
              '<li>',
-            '<div class="thumbnail">',
-	     	 '<a href="' + url + '">',
-             '<img  src="' + url + '" alt="優太郎くんの写真" width="260" height="180"/>',
-             '</a>',
+	     '<div class="thumbnail">',
+             '<img  src="/getImage?imagePath=' + imagePath + '" width="260" height="180" />',
              '</div>',
              '</li>'
           ].join('');
-      	return element;
-      };
-      var addImage = function( imagePath ) {
-          var element = imageHtml( imagePath )
+
           $("#imageContainer").append(element);
       };
       
@@ -47,33 +30,28 @@
              var file = data[i];
              addImage( 'uploadimages/yutaro/' + file );
            }
-          var options = {
-            jQueryMobile: true
-          };
-          $("#imageContainer a").photoSwipe(options);
-
         } );
       };
       
       $(function() {
         getImages();
-
-         new ConnectionStatus({
-            socket : socket,
-            selector : {
-                status : "#connectionStatus",
-                count : "#connectionCount",
-                transport : "#connectionTransport"
-            }
-         });
-
       });
       
       socket.on('uploaded', function(data){
-      	addImage( data.imagePath );
+
+          var element = [
+             '<li>',
+	     '<div class="thumbnail">',
+             '<img  src="/getImage?imagePath=' + data.imagePath + '" width="260" height="180" />',
+             '</div>',
+             '</li>'
+          ].join('');
+
+          $("#imageContainer").append(element);
       });
+
     </script>
-    <title>ゆうたろう</title>
+    <title>ゆうたろうアプリ</title>
   </head>
   <body>
 
@@ -103,10 +81,8 @@
 	  </ul>
 	</div>
       </div>
+      
     </div>
-    <div class="connectionStatusArea">
-      接続ステータス:<span id="connectionStatus">--</span>, 
-    </div>      
   </body>
 </html>
 
